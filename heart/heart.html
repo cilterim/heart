@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Drawing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let numLines = 1000;  // Total number of lines
+        let currentLine = 0;  // Keeps track of the current line to draw
+        let showMessage = false;  // Flag to show the message
+
+        function setup() {
+            createCanvas(windowWidth, windowHeight);
+            background(0);
+            stroke(255, 0, 0);
+            noFill();
+            strokeWeight(2);  // Line thickness
+            frameRate(30);  // Control the drawing speed
+        }
+
+        function draw() {
+            if (currentLine < numLines) {
+                // Calculate the angle for the current line
+                let angle = TWO_PI * currentLine / numLines;
+                let angleFactor = angle * 10;
+                let x = 16 * pow(sin(angleFactor), 3) * 15;
+                let y = (13 * cos(angleFactor) - 5 * cos(2 * angleFactor) - 2 * cos(3 * angleFactor) - cos(4 * angleFactor)) * 15;
+
+                // Draw the line from the center to the heart's edge
+                line(width / 2, height / 2, width / 2 + x, height / 2 - y);
+
+                // Display the message even earlier, when 1/10 of the heart is drawn
+                if (currentLine >= numLines / 10 && !showMessage) {
+                    showMessage = true;
+                    displayMessage();
+                }
+
+                currentLine++;  // Move to the next line
+            }
+        }
+
+        function displayMessage() {
+            // Draw the message further down the screen with thinner and lowercase text
+            fill(255, 0, 0);
+            textSize(48);
+            textAlign(CENTER, CENTER);
+            textStyle(NORMAL);
+            text("tdu sa bota <3", width / 2, height / 2 + 350);  // Positioned lower on the screen
+        }
+
+        function windowResized() {
+            resizeCanvas(windowWidth, windowHeight);
+            background(0);  // Redraw background on resize
+            currentLine = 0;  // Reset drawing progress
+            showMessage = false;  // Reset message display
+            loop();  // Restart the drawing process
+        }
+    </script>
+</body>
+</html>
